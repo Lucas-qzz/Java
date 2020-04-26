@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qiuzhao.blog.dao.BlogDao">
+    <resultMap id="blogMap" type="com.qiuzhao.blog.domain.Blog">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="first_picture" property="firstPicture"/>
+        <result column="flag" property="flag"/>
+        <result column="views" property="views"/>
+        <result column="appreciation" property="appreciation"/>
+        <result column="share_statement" property="shareStatement"/>
+        <result column="published" property="published"/>
+        <result column="recommend" property="recommend"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="description" property="description"/>
+        <association property="type" javaType="com.qiuzhao.blog.domain.Type">
+            <id column="type_id" property="id"/>
+            <result column="typename" property="name"/>
+        </association>
+        <association property="user" javaType="com.qiuzhao.blog.domain.User">
+            <id column="user_id" property="id"/>
+            <result column="nickname" property="nickname"/>
+            <result column="avatar" property="avatar"/>
+        </association>
+    </resultMap>
+    <select id="test" resultMap="blogMap">
+        select
+        t_blog.* ,t_type.id,t_type.name as typename,t_user.nickname,t_user.avatar
+        from t_blog,t_type,t_user
+        where t_blog.id = #{id} and t_blog.title = #{title} and t_blog.type_id = t_type.id and t_blog.user_id = t_user.id
+    </select>
+    <select id="getBlog" resultMap="blogMap">
+        select
+        t_blog.* ,t_type.id,t_type.name as typename,t_user.nickname,t_user.avatar
+        from t_blog,t_type,t_user
+        where t_blog.id = #{id} and t_blog.type_id = t_type.id and t_blog.user_id = t_user.id
+    </select>
+    <select id="listBlog" parameterType="com.qiuzhao.blog.domain.Blog"
+            resultMap="blogMap">
+        select t_blog.*,t_type.id,t_type.name as typename,t_user.nickname,t_user.avatar
+        from t_blog,t_type,t_user
+        where t_blog.type_id = t_type.id and t_blog.user_id = t_user.id
+        <if test="title != null ">
+            and title like #{title}
+        </if>
+        <if test="type != null">
+            and type_id = #{type.id}
+        </if>
+        <if test="recommend">
+            and recommend = 1
+        </if>
+    </select>
+    <insert id="saveBlog" parameterType="com.qiuzhao.blog.domain.Blog"
+                 useGeneratedKeys="true"  keyProperty="id">
+        insert into
+        t_blog
+        (title,content,first_picture,flag,views,appreciation,share_statement,commentabled,published,recommend,create_time,update_time,type_id,user_id,description)
+        values (#{title},#{content},#{firstPicture},#{flag},#{views},#{appreciation},#{shareStatement},#{commentabled},#{published},#{recommend},#{createTime},#{updateTime},#{type.id},#{user.id},#{description})
+    </insert>
+    <update id="updateBlog">
+        update t_blog set
+        title = #{blog.title},content = #{blog.content},first_picture = #{blog.firstPicture},flag = #{blog.flag},views=#{blog.views},appreciation = #{blog.appreciation},
+        share_statement=#{blog.shareStatement},commentabled = #{blog.commentabled},published = #{blog.published},recommend = #{blog.recommend}, create_time = #{blog.createTime},update_time = #{blog.updateTime},type_id = #{blog.type.id},description = #{blog.description}
+        where id = #{blog.id}
+    </update>
+    <update id="deleteBlog">
+        delete from t_blog
+        where id = #{id}
+    </update>
+    <select id="listBlogAboutRecommend" resultMap="blogMap">
+        select *
+        from t_blog
+        where recommend = true
+    </select>
+
+    <select id="countByTypes" resultMap="blogMap">
+        select *
+        from t_blog
+        where type_id = #{id}
+    </select>
+
+    <select id="searchBlogs" resultMap="blogMap">
+        select t_blog.*,t_type.id as typeId,t_type.name as typename,t_user.nickname,t_user.avatar
+        from t_blog ,t_type , t_user
+        where title like #{query} or content like #{query} and t_blog.type_id = t_type.id and t_blog.user_id = t_user.id
+
+    </select>
+
+    <update id="updateBlogViews" parameterType="java.lang.Integer">
+        update t_blog
+        set views = views + 1
+        where id =#{id}
+    </update>
+
+    <select id="selectYears" resultType="java.lang.String">
+        select date_format(b.update_time,'%Y') as year
+        from t_blog b group by year order by year DESC
+    </select>
+    <select id="selectByYear" parameterType="java.lang.String"
+            resultMap="blogMap">
+        select t_blog.*,t_type.id,t_type.name as typename,t_user.nickname,t_user.avatar
+        from t_blog,t_type,t_user
+        where date_format(t_blog.update_time,'%Y') = #{year} and t_blog.type_id = t_type.id and t_blog.user_id = t_user.id
+    </select>
+
+    <select id="selectNewBlog" resultMap="blogMap">
+        select t_blog.*,t_type.id,t_type.name as typename,t_user.nickname,t_user.avatar
+        from t_blog,t_type,t_user
+        where t_blog.type_id = t_type.id and t_blog.user_id = t_user.id order by t_blog.update_time desc limit 4
+    </select>
+</mapper>

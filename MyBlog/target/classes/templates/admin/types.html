@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/_fragmentOfAdmin::head(~{::title})">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="../../static/css/index.css" th:href="@{/css/index.css}">
+    <title>分类管理</title>
+</head>
+<body>
+    <!--导航-->
+    <nav th:replace="admin/_fragmentOfAdmin::nav(2)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+        <div class="ui container">
+            <div class="ui inverted secondary stackable menu">
+                <h2 class="ui teal header item">博客管理</h2>
+                <a href="#" class="item m-mobile-hide menu_item"><i class="home icon"></i>博客</a>
+                <a href="#" class="active item m-mobile-hide menu_item"><i class="idea icon"></i>分类</a>
+                <a href="#" class="item m-mobile-hide menu_item"><i class="tags icon"></i>标签</a>
+                <div class="right m-mobile-hide menu_item menu">
+                    <div class="ui dropdown item">
+                        <div class="text">
+                            <img class="ui avatar image" src="../../static/images/Avatar.jpg" th:src="@{/images/Avatar.jpg}">
+                            邱朝
+                        </div>
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <a href="#" class="item" th:href="@{admin/logout}">注销</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#" class="ui black icon button m-icon m-mobile-show" id="menu">
+            <i class="sidebar icon"></i>
+        </a>
+    </nav>
+    <!--二级导航-->
+    <div class="ui attached pointing menu">
+        <div class="ui container">
+            <div class="right menu">
+                <a href="#" th:href="@{/admin/types/input}" class="teal item">发布</a>
+                <a href="#" th:href="@{/admin/types}" class="active teal item">列表</a>
+            </div>
+        </div>
+    </div>
+    <!--中间-->
+    <div class="m-padded-tb-big m-container-small">
+        <div class="ui container">
+            <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
+                <i class="close icon"></i>
+                <div class="header">提示：</div>
+                <p th:text="${message}">操作成功！</p>
+            </div>
+            <table class="ui teal table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>名称</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="type: ${page.list}">
+                        <td th:text="${type.id}">1</td>
+                        <td th:text="${type.name}">算法</td>
+                        <td>
+                            <a href="#" th:href="@{/admin/types/{id}/input(id=${type.id})}" class="ui mini teal basic button">编辑</a>
+                            <a href="#" th:href="@{/admin/types/{id}/delete(id=${type.id})}" class="ui mini red basic button">删除</a>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="6">
+                            <div class="ui mini pagination menu">
+                                <a th:href="@{/admin/types(pageNum=${page.getFirstPage()})}" class="item" th:classappend="${page.pageNum==1}?'active teal'">首页</a>
+                                <a th:href="@{/admin/types(pageNum=${page.prePage})}" class="item" th:unless="${page.isIsFirstPage()}">上一页</a>
+                                <a th:href="@{/admin/types(pageNum=${page.nextPage})}" class="item" th:unless="${page.isIsLastPage()}">下一页</a>
+                                <a th:href="@{/admin/types(pageNum=${page.getLastPage()})}" class="item" th:classappend="${page.pageNum == page.getLastPage()}?'active teal'">尾页</a>
+                            </div>
+                            <a href="#" th:href="@{/admin/types/input}" class="ui mini teal basic button right floated">新增</a>
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <!--底部-->
+    <footer th:replace="admin/_fragmentOfAdmin::footer" class="ui inverted vertical segment m-padded-tb-massive">
+        <div class="ui center aligned container">
+            <div class="ui inverted divided stackable grid">
+                <div class="three wide column centered">
+                    <div class="ui inverted link list">
+                        <div class="item">
+                            <img src="../../static/images/wechat.jpg" class="ui rounded image" alt="" style="width: 110px">
+                        </div>
+                        <!--                        <div class="item">-->
+                        <!--                            <img src="../static/images/QQ.png" class="ui rounded image" alt="" style="width: 110px">-->
+                        <!--                        </div>-->
+                    </div>
+                </div>
+                <div class="three wide column">
+                    <h4 class="ui inverted head m-opacity-mini m-text-space">最新博客</h4>
+                    <div class="ui inverted link list">
+                        <a href="" class="item">story</a>
+                        <a href="" class="item">story</a>
+                        <a href="" class="item">story</a>
+                        <a href="" class="item">story</a>
+                    </div>
+                </div>
+                <div class="three wide column">
+                    <h4 class="ui inverted head m-opacity-mini m-text-space">联系我</h4>
+                    <div class="ui inverted link list">
+                        <a href="" class="item">Email: 2410252220@qq.com</a>
+                        <a href="" class="item">QQ: 2410252220</a>
+                    </div>
+                </div>
+                <div class="seven wide column">
+                    <h4 class="ui inverted head m-opacity-mini m-text-space">最新博客</h4>
+                    <p class="m-opacity-mini m-text-thin m-text-space">babababababababbababababababbab</p>
+                </div>
+            </div>
+            <div class="ui inverted section divider"></div>
+            <p class="m-opacity-tiny m-text-thin m-text-space">鄂ICP备19031464号-1</p>
+        </div>
+    </footer>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    $("#menu").click(function () {
+        $(".menu_item").toggleClass('m-mobile-hide')
+    })
+    $('.ui.dropdown').dropdown({
+        on:"hover"
+    });
+    //消息提示关闭初始化
+    $('.message .close')
+        .on('click', function () {
+            $(this)
+                .closest('.message')
+                .transition('fade');
+        });
+</script>
+</body>
+</html>

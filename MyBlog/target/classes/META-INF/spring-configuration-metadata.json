@@ -1,0 +1,11 @@
+{
+  "groups": [
+    {
+      "name": "comment",
+      "type": "com.qiuzhao.blog.web.CommentController",
+      "sourceType": "com.qiuzhao.blog.web.CommentController"
+    }
+  ],
+  "properties": [],
+  "hints": []
+}

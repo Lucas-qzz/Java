@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qiuzhao.blog.dao.TypeDao">
+    <update id="saveType" keyProperty="id" parameterType="com.qiuzhao.blog.domain.Type">
+        insert into t_type (name)
+        values (#{name})
+    </update>
+    <select id="getType" parameterType="java.lang.Integer"
+            resultType="com.qiuzhao.blog.domain.Type">
+        select
+        *
+        from t_type
+        where id = #{id}
+    </select>
+    <select id="getTypeByName" parameterType="java.lang.String"
+            resultType="com.qiuzhao.blog.domain.Type">
+        select
+        *
+        from t_type
+        where name = #{name}
+    </select>
+    <select id="listType" resultType="com.qiuzhao.blog.domain.Type">
+        select
+        *
+        from t_type
+    </select>
+    <update id="updateType" keyProperty="id">
+        update t_type
+        set name = #{type.name}
+        where id = #{id}
+    </update>
+    <update id="deleteType" parameterType="java.lang.Integer">
+        delete
+        from t_type
+        where id = #{id}
+    </update>
+</mapper>

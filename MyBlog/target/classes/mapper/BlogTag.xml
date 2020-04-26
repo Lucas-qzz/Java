@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qiuzhao.blog.dao.BlogTagDao">
+    <update id="saveBlogAndTag">
+        insert into t_blog_tags
+        (blogs_id,tags_id)
+        values (#{bid},#{tid})
+    </update>
+    <delete id="deleteBlogAndTag">
+        delete from t_blog_tags
+        where blogs_id = #{id}
+    </delete>
+    <select id="getPartOfListTag" resultType="java.lang.Integer">
+        select tags_id
+        from t_blog_tags
+        where blogs_id =#{id}
+    </select>
+    <select id="getPartOfListBlog" resultType="java.lang.Integer">
+        select blogs_id
+        from t_blog_tags
+        where tags_id = #{id}
+    </select>
+</mapper>

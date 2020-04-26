@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qiuzhao.blog.dao.TagDao">
+    <update id="saveTag" keyProperty="id" parameterType="com.qiuzhao.blog.domain.Tag">
+        insert into t_tag (name)
+        values (#{name})
+    </update>
+    <select id="getTag" parameterType="java.lang.Integer"
+            resultType="com.qiuzhao.blog.domain.Tag">
+        select
+        *
+        from t_tag
+        where id = #{id}
+    </select>
+    <select id="getTagByName" parameterType="java.lang.String"
+            resultType="com.qiuzhao.blog.domain.Tag">
+        select
+        *
+        from t_tag
+        where name = #{name}
+    </select>
+    <select id="listTagOfPart" resultType="com.qiuzhao.blog.domain.Tag" parameterType="java.lang.String">
+        select
+        *
+        from t_tag
+        where id in
+        <foreach item="item" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="listTag" resultType="com.qiuzhao.blog.domain.Tag">
+        select
+        *
+        from t_tag
+    </select>
+    <update id="updateTag" keyProperty="id">
+        update t_tag
+        set name = #{tag.name}
+        where id = #{id}
+    </update>
+    <update id="deleteTag" parameterType="java.lang.Integer">
+        delete
+        from t_tag
+        where id = #{id}
+    </update>
+</mapper>
